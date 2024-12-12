@@ -66,12 +66,12 @@ skip = 1
 
 # barbs = ax.barbs(lon_2d[::skip, ::skip], lat_2d[::skip, ::skip], u[::skip, ::skip], v[::skip, ::skip], length = 6, transform=ccrs.PlateCarree())
 
-stream = ax.streamplot(lon_2d, lat_2d, u, v, transform=ccrs.PlateCarree(), color='black', linewidth=1, density=0.4, broken_streamlines=True)
+stream = ax.streamplot(lon_2d, lat_2d, u, v, transform=ccrs.PlateCarree(), color='black', linewidth=1, density=0.6, broken_streamlines=False)
 
 
 # Plot wind speed contours
 
-contour_levels = 30
+contour_levels = 40
 
 # Plot using contourf (filled contours)
 contour = ax.contourf(lon_2d, lat_2d, wspd, transform=ccrs.PlateCarree(), cmap='coolwarm', levels=contour_levels)
@@ -81,7 +81,7 @@ TTL = f"{press_lvl} hPa Wind-field (streamlines with overlayed wind speed) - {tm
 
 # Add a colorbar
 cbar = plt.colorbar(contour, ax=ax, orientation='vertical', shrink=0.7, pad=0.05)
-cbar.set_label(f'Wind Speed')
+cbar.set_label(f'Wind Speed [m/s]')
 
 
 # Set title
