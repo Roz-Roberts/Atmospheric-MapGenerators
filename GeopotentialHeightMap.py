@@ -1,7 +1,5 @@
 import numpy as np
-import pandas as pd
 import matplotlib.pyplot as plt
-import scipy as scp
 import xarray as xr
 import cartopy.crs as ccrs
 import cartopy.feature as cfeature
@@ -9,23 +7,22 @@ import cartopy.feature as cfeature
 
 
 # Open the NetCDF4 file
-file_path = "hgt.raw.2023.nc"   # Contains Geopotential Data Fro the entire globe
+file_path = "hgt.raw.2023.nc"   # Contains Geopotential Data For the entire globe
 dataset = xr.open_dataset(file_path)
 
 
 
 # Inspect the dataset
-print(dataset)
+# print(dataset)
 
-# Convert a variable to a Pandas DataFrame
-# Replace 'your_variable_name' with the variable you want to extract
+
 variable_name = 'hgt'
 
-tm = '2023-03-01T18:00:00'
+tm = '2023-03-01T12:00:00'
 
 press_lvl = 500.0
 
-data = dataset[variable_name].sel(time=tm, level=press_lvl).squeeze()  # Choose time index if applicable
+data = dataset[variable_name].sel(time=tm, level=press_lvl).squeeze()  # Choose the correct time and pressure level
 
 print(data)
 
@@ -38,7 +35,7 @@ lon = dataset['lon']  # Replace 'lon' with your dataset's longitude variable nam
 lon_2d, lat_2d = np.meshgrid(lon, lat)
 
 
-projection = ccrs.LambertConformal(central_longitude=-96, central_latitude=37.5)
+projection = ccrs.LambertConformal(central_longitude=-96, central_latitude=37.5)  # Creates correct projection type
 
 
 # Plot the data
@@ -61,8 +58,9 @@ contour_lines = ax.contour(lon_2d, lat_2d, data, transform=ccrs.PlateCarree(), c
 
 
 
-TTL = f"500 hPa Geopotential - {tm}"
-# # Add a colorbar
+TTL = f"500 hPa Geopotential - {tm}"  # Formats correct title
+
+# # Add a colorbar (If Wanted)
 # cbar = plt.colorbar(contour, ax=ax, orientation='vertical', shrink=0.7, pad=0.05)
 # cbar.set_label(f'{TTL}')
 

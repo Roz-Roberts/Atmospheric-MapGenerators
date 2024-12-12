@@ -1,7 +1,5 @@
 import numpy as np
-import pandas as pd
 import matplotlib.pyplot as plt
-import scipy as scp
 import xarray as xr
 import cartopy.crs as ccrs
 import cartopy.feature as cfeature
@@ -9,8 +7,8 @@ import cartopy.feature as cfeature
 
 
 # Open the NetCDF4 file
-file_path1 = "hgt.day.climatemean.nc"   # Contains Geopotential Height Anamoly Data Fro the entire globe
-file_path2 = "hgt.raw.2023.nc"
+file_path1 = "hgt.day.climatemean.nc"   # Contains long-term Geopotential Height mean Data For the entire globe
+file_path2 = "hgt.raw.2023.nc"  # Contains GptH data for the teh globe
 
 datamean = xr.open_dataset(file_path1)
 dataset = xr.open_dataset(file_path2)
@@ -19,8 +17,6 @@ dataset = xr.open_dataset(file_path2)
 # Inspect the dataset
 # print(dataset)
 
-# Convert a variable to a Pandas DataFrame
-# Replace 'your_variable_name' with the variable you want to extract
 variable_name = 'hgt'
 
 tm = '2023-03-01T12:00:00'
@@ -29,10 +25,9 @@ tm_mean = '0001-03-01T00:00:00'
 
 press_lvl = 500.0
 
-data_mean = datamean[variable_name].sel(time=tm_mean, level=press_lvl).squeeze()  # Choose time index if applicable
+data_mean = datamean[variable_name].sel(time=tm_mean, level=press_lvl).squeeze()  # Gets long-term mean data for correct date and pressure level
 
-data = dataset[variable_name].sel(time=tm, level=press_lvl).squeeze()  # Choose time index if applicable
-
+data = dataset[variable_name].sel(time=tm, level=press_lvl).squeeze()  # Gets GptH for the correct date and pressure level
 data = data - data_mean
 
 
@@ -46,7 +41,7 @@ lon = dataset['lon']  # Replace 'lon' with your dataset's longitude variable nam
 # Create 2D latitude and longitude arrays
 lon_2d, lat_2d = np.meshgrid(lon, lat)
 
-
+# Creates the correct projection method
 projection = ccrs.LambertConformal(central_longitude=-96, central_latitude=37.5)
 
 
@@ -60,7 +55,7 @@ ax.add_feature(cfeature.BORDERS, linestyle=':')
 ax.add_feature(cfeature.STATES, edgecolor='gray')
 
 
-contour_levels = 40
+contour_levels = 40  # Defines the number of contours you want plotted on the final projection
 
 # Plot using contourf (filled contours)
 contour = ax.contourf(lon_2d, lat_2d, data, transform=ccrs.PlateCarree(), cmap='bwr', levels=contour_levels)
@@ -70,8 +65,9 @@ contour_lines = ax.contour(lon_2d, lat_2d, data, transform=ccrs.PlateCarree(), c
 
 
 
-TTL = f"500 hPa Geopotential Height Anomaly - {tm}"
-# # Add a colorbar
+TTL = f"500 hPa Geopotential Height Anomaly - {tm}" # Title for plot
+
+# # Add a colorbar (If Wanted)
 # cbar = plt.colorbar(contour, ax=ax, orientation='vertical', shrink=0.7, pad=0.05)
 # cbar.set_label(f'{TTL}')
 
