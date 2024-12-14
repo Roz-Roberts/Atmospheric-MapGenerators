@@ -4,6 +4,7 @@ import xarray as xr
 import cartopy.crs as ccrs
 import cartopy.feature as cfeature
 from matplotlib.colors import TwoSlopeNorm
+from matplotlib.colors import LinearSegmentedColormap
 
 
 # Open the NetCDF4 file
@@ -70,12 +71,20 @@ contour_levels = 30
 
 # Create a diverging colormap centered at 0°C
 norm = TwoSlopeNorm(vmin=data_constrained.min(), vcenter=540, vmax=data_constrained.max())  # Center white at 0°C
-cmap = plt.cm.winter # Diverging colormap (red for hot, blue for cold)
+# cmap = plt.cm.winter # Diverging colormap (red for hot, blue for cold)
+
+# Define the custom colormap
+colors = [(17/255, 0/255, 255/255), (2/255,6/255,120/255), (0/255, 0/255, 0/255), (135/255,1/255,1/255) ,(227/255, 0/255, 0/255)]
+
+# Create the colormap
+cmap_name = "BlueBlackRed"
+# n_colors = 500  # Number of colors in the colormap
+custom_cmap = LinearSegmentedColormap.from_list(cmap_name, colors, N=contour_levels)
 
 
 
 # Optionally add contour lines
-contour_lines = ax.contour(lon_2d, lat_2d, data_constrained, transform=ccrs.PlateCarree(), cmap=cmap, norm=norm, linewidths=0.5, levels=contour_levels)
+contour_lines = ax.contour(lon_2d, lat_2d, data_constrained, transform=ccrs.PlateCarree(), cmap=custom_cmap, norm=norm, linewidths=0.5, levels=contour_levels)
 
 
 
